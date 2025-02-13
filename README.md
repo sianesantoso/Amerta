@@ -17,7 +17,7 @@ Supplier Page
 
 Laporan Pembelian Page
 ![LaporanPembelian-Page1 Toko Amerta](gambar_web/laporanpembelian-page1.png)
-![LaporanPembelian-Page2 Toko Amerta](gambar_web/laporanpembelian-page2.png)
+![LaporanPembelian-Page2 Toko Amerta](gambar_web/laporanpembelianpage-2.png)
 ![LaporanPembelian-Page3 Toko Amerta](gambar_web/laporanpembelian-page3.png)
 ![LaporanPembelian-Page4 Toko Amerta](gambar_web/laporanpembelian-page4.png)
 ![LaporanPembelian-Page5 Toko Amerta](gambar_web/laporanpembelian-page5.png)

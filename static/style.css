@@ -1,0 +1,229 @@
+/* Global styles */
+html, body {
+    height: 100%; /* Memastikan body dan html memiliki tinggi penuh */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Gunakan Flexbox */
+    flex-direction: column; /* Arah kolom untuk menempatkan footer di bawah */
+    overflow-y: auto; /* Mengaktifkan scroll jika konten terlalu panjang */
+    font-family: 'Didot', serif;
+    background-color: #EEF5FF;
+}
+
+/* Wrapper for content */
+.wrapper {
+    flex: 1; /* Isi ruang yang tersedia antara navbar dan footer */
+}
+
+/* Navbar styles */
+.navbar {
+    font-family: 'Impact', fantasy;
+    background-color: #4A628A;
+    border-bottom: 2px solid #4A628A;
+    position: sticky; /* Navbar tetap di atas saat scroll */
+    top: 0;
+    z-index: 1000;
+}
+
+/* Dropdown styles */
+.navbar .dropdown-menu {
+    width: auto;
+    min-width: 250px;
+    max-width: 400px; /* Batas maksimal lebar dropdown */
+}
+
+/* Gaya khusus untuk navbar title (navbar-brand) */
+.navbar-brand {
+    color: #fff !important; /* Warna teks awal */
+    font-size: 1.5rem; /* Ukuran font khusus untuk title */
+    text-transform: uppercase; /* Huruf besar semua */
+}
+
+.navbar-brand:hover {
+    color: #cce5ff !important; /* Warna title saat hover */
+}
+
+/* Gaya khusus untuk navbar links (nav-link) */
+.navbar-nav .nav-link {
+    color: #fff !important; /* Warna teks awal */
+    font-size: 1rem; /* Ukuran lebih kecil dari title */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #cce5ff !important; /* Warna link saat hover */
+}
+
+/* Footer */
+footer {
+    background-color: #4A628A; /* Ganti dengan warna navbar */
+    color: #fff;
+    text-align: center;
+    height: 40px; /* Atur tinggi footer */
+    line-height: 40px; /* Atur line-height sama dengan tinggi untuk pemusatan vertikal */
+    position: relative; /* Memastikan footer tetap berada di bawah */
+    bottom: 0; /* Menempatkan footer di bagian bawah */
+    width: 100%; /* Memastikan footer mengambil lebar penuh halaman */
+}
+
+/* Scroll behavior */
+.container, .content {
+    max-width: 100%;
+    overflow-x: auto; /* Scroll horizontal untuk konten yang terlalu lebar */
+}
+
+h1 {
+    color: #333;
+}
+
+h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+h4 {
+    color: #333;
+}
+
+.custom-hr {
+    border-width: 2px;
+    border-color: #375371;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Flash Messages */
+.alert {
+    margin: 15px 0;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+}
+
+/* Buttons for removing items */
+.btn-danger {
+    margin-left: 10px;
+}
+
+/* Forms */
+form .form-control, 
+form .form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+
+/* HALAMAN STOK BARANG */
+/* Table styles */
+.stok-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.stok-page table th, 
+.stok-page table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.stok-page table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.stok-page table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.stok-page table tr:hover {
+    background-color: #e9ecef;
+}
+
+.stok-page .btn-secondary {
+    margin: 0 5px;
+}
+
+/* Transaction page */
+.transaction-page #barang-container .barang-row {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-page #barang-container .barang-row:hover {
+    background-color: #f8f9fa;
+}
+
+.transaction-page .custom-btn {
+    width: 150px; /* lebar tombol */
+    margin-top: 10px;
+}
+
+/* Menempatkan total pembelian dan tombol simpan transaksi di kanan bawah */
+.total-pembelian-wrapper {
+    display: flex;
+    flex-direction: column;  /* Menumpuk elemen secara vertikal */
+    align-items: flex-end;   /* Memposisikan elemen di sebelah kanan */
+    margin-top: 20px;         /* Memberikan jarak antara elemen-elemen di atas */
+}
+  
+/* Menambahkan ukuran font untuk total pembelian */
+.total-pembelian-wrapper h3 {
+    margin-bottom: 15px;
+    font-size: 30px; /* Ukuran font untuk total pembelian */
+}
+  
+/* Menambahkan ukuran font untuk tombol simpan transaksi */
+.transaction-page .total-pembelian-wrapper button {
+    font-size: 15px; /* Ukuran font untuk tombol */
+    margin-bottom: 15px;
+}
+
+
+/*laporan*/
+/* Form Sections */
+.laporan-transaksi-page .form-label {
+    font-weight: bold;
+}
+
+.laporan-stok-page .form-label {
+    font-weight: bold;
+}
+
+.shadow-sm {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.laporan-table th, .laporan-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Flexbox untuk bulan dan tahun sejajar */
+#bulan-tahun-wrapper {
+    display: flex;
+    gap: 20px; /* Jarak antara elemen bulan dan tahun */
+    justify-content: start; /* Agar sejajar di kiri */
+    align-items: center; /* Tengah secara vertikal */
+}
+
+#bulan-tahun-wrapper label {
+    margin-right: 10px;
+}
+
+#bulan,
+#tahun {
+    max-width: 200px; /* Membatasi lebar input */
+}
+
+

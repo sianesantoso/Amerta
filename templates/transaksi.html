@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Transaksi{% endblock %}
+
+{% block body_class %}transaction-page{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center">TRANSAKSI PEMBELIAN</h1>
+  <hr style="border-width: 5px;">
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Form Transaksi -->
+  <h3>Nama Pelanggan</h3>
+  <form method="POST" action="/transaksi">
+    <div class="mb-3">
+      <input type="text" class="form-control" id="nama_pembeli" name="nama_pembeli" placeholder="Nama Pembeli" required>
+    </div>
+
+    <hr class="custom-hr">
+
+    <h3>Barang yang Dibeli</h3>
+
+    <div id="barang-container">
+      <div class="row mb-3 barang-row" id="barang-row-0">
+        <div class="col-md-4">
+          <select name="kode_barang_0" class="form-select" onchange="updateTotal(0)" required>
+            <option value="" disabled selected>Pilih Barang</option>
+            {% for item in barang %}
+            <option value="{{ item.kode_barang }}" data-nama="{{ item.nama_barang }}" data-harga="{{ item.harga }}" data-stok="{{ item.jumlah }}">
+              {{ item.nama_barang }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <input type="number" name="jumlah_0" class="form-control" value="1" min="1" id="jumlah_0" onchange="updateTotal(0)" required>
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control" id="nama_barang_0" readonly>
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control" id="total_harga_0" readonly>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-danger" onclick="removeBarang(0)">Hapus</button>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" class="btn btn-primary custom-btn" onclick="addBarang()">Tambah Barang</button>
+
+    <hr class="custom-hr">
+
+    <!-- Pojok kanan bawah -->
+    <div class="total-pembelian-wrapper">
+      <h3>TOTAL PEMBELIAN : <span id="total_pembelian">Rp 0.00</span></h3>
+      <input type="hidden" name="total_pembelian" id="total_pembelian_input">
+      <input type="hidden" name="tanggal_transaksi" value="{{ current_time }}">
+      <button type="submit" class="btn btn-success custom-btn">Simpan Transaksi</button>
+    </div>
+    </form>
+</div>
+
+<script>
+  let barangCount = 1;
+
+  function addBarang() {
+    const container = document.getElementById('barang-container');
+    const newRow = document.createElement('div');
+    newRow.classList.add('row', 'mb-3', 'barang-row');
+    newRow.id = `barang-row-${barangCount}`;
+
+    newRow.innerHTML = `
+      <div class="col-md-4">
+        <select name="kode_barang_${barangCount}" class="form-select" onchange="updateTotal(${barangCount})" required>
+          <option value="" disabled selected>Pilih Barang</option>
+          {% for item in barang %}
+          <option value="{{ item.kode_barang }}" data-nama="{{ item.nama_barang }}" data-harga="{{ item.harga }}" data-stok="{{ item.jumlah }}">
+            {{ item.nama_barang }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="number" name="jumlah_${barangCount}" class="form-control" value="1" min="1" id="jumlah_${barangCount}" onchange="updateTotal(${barangCount})" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" id="nama_barang_${barangCount}" readonly>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" id="total_harga_${barangCount}" readonly>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-danger" onclick="removeBarang(${barangCount})">Hapus</button>
+      </div>
+    `;
+
+    container.appendChild(newRow);
+    barangCount++;
+  }
+
+  function updateTotal(index) {
+    const select = document.querySelector(`select[name="kode_barang_${index}"]`);
+    const selectedOption = select.selectedOptions[0];
+    const harga = parseFloat(selectedOption ? selectedOption.getAttribute('data-harga') : 0);
+    const stok = parseInt(selectedOption ? selectedOption.getAttribute('data-stok') : 0);
+    let jumlah = parseInt(document.getElementById(`jumlah_${index}`).value);
+
+    // Batasi jumlah jika melebihi stok
+    if (jumlah > stok) {
+      jumlah = stok;  // Batasi jumlah sesuai stok yang tersedia
+      document.getElementById(`jumlah_${index}`).value = stok;  // Update input jumlah dengan stok yang tersedia
+      alert("Stok tidak mencukupi! Jumlah barang dibatasi dengan stok yang tersedia.");
+    }
+
+    const totalHarga = harga * jumlah;
+
+    document.getElementById(`nama_barang_${index}`).value = selectedOption ? selectedOption.getAttribute('data-nama') : '';
+    document.getElementById(`total_harga_${index}`).value = `Rp ${totalHarga.toFixed(2)}`;
+
+    updateTotalPembelian();
+  }
+
+  function updateTotalPembelian() {
+    let total = 0;
+    const totalPembelianElements = document.querySelectorAll('[id^="total_harga_"]');
+    totalPembelianElements.forEach(function (element) {
+      total += parseFloat(element.value.replace('Rp ', '').replace(',', '.')) || 0;
+    });
+    document.getElementById('total_pembelian').innerText = `Rp ${total.toFixed(2)}`;
+    document.getElementById('total_pembelian_input').value = total.toFixed(2);
+  }
+
+  function removeBarang(index) {
+    const row = document.getElementById(`barang-row-${index}`);
+    row.remove();
+    updateTotalPembelian();
+  }
+</script>
+{% endblock %}

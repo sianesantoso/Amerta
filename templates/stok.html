@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Stok Barang{% endblock %}
+
+{% block body_class %}stok-page{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center">STOK BARANG</h1>
+  <hr style="border-width: 5px;">
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Form Tambah Barang -->
+  <h3>Tambah Barang</h3>
+  <form method="POST" action="/add" class="mb-4">
+    <div class="row g-3">
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="kode_barang" placeholder="Kode Barang" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang" required>
+      </div>
+      <div class="col-md-2">
+        <input type="number" class="form-control" name="jumlah" placeholder="Jumlah" min="0" required>
+      </div>
+      <div class="col-md-2">
+        <input type="number" class="form-control" name="harga" placeholder="Harga" step="1000" min="0" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="supplier_aktif" placeholder="Supplier" required>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Tambah</button>
+      </div>
+    </div>
+  </form>
+
+  <hr class="custom-hr">
+
+  <!-- Tabel Barang -->
+  <h3>Daftar Stok Barang</h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr class="table-primary text-center">
+        <th>Kode Barang</th>
+        <th>Nama Barang</th>
+        <th>Jumlah</th>
+        <th>Harga</th>
+        <th>Supplier</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in barang %}
+      <tr id="row_{{ item.kode_barang }}">
+        <td>{{ item.kode_barang }}</td>
+        <td id="nama_barang_{{ item.kode_barang }}">{{ item.nama_barang.title() }}</td>
+        <td id="jumlah_{{ item.kode_barang }}">{{ item.jumlah }}</td>
+        <td id="harga_{{ item.kode_barang }}">Rp {{ item.harga }}.00</td>
+        <td id="supplier_aktif_{{ item.kode_barang }}">{{ item.supplier_aktif.title() }}</td>
+        <td class="text-center">
+          <!-- Tombol Update untuk Menampilkan Form -->
+          <button type="button" class="btn btn-warning btn-sm" onclick="showUpdateForm('{{ item.kode_barang }}')">Update</button>
+          <!-- Hapus -->
+          <a href="/delete/{{ item.kode_barang }}" class="btn btn-danger btn-sm">Hapus</a>
+
+          <!-- Form Update (Tersembunyi) -->
+          <form method="POST" action="/update" id="update_form_{{ item.kode_barang }}" class="mt-2" style="display:none;">
+            <input type="hidden" name="kode_barang" value="{{ item.kode_barang }}">
+            <input type="text" class="form-control mb-2" name="nama_barang" value="{{ item.nama_barang.title() }}" required>
+            <input type="number" class="form-control mb-2" name="jumlah" value="{{ item.jumlah }}" required>
+            <input type="number" class="form-control mb-2" name="harga" value="{{ item.harga }}" step="0.01" required>
+            <input type="text" class="form-control mb-2" name="supplier_aktif" value="{{ item.supplier_aktif.title() }}" required>
+            <button type="submit" class="btn btn-primary btn-sm w-100">Simpan</button>
+            <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" onclick="hideUpdateForm('{{ item.kode_barang }}')">Batal</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function showUpdateForm(kode_barang) {
+    // Sembunyikan data biasa
+    document.getElementById('nama_barang_' + kode_barang).style.display = 'none';
+    document.getElementById('jumlah_' + kode_barang).style.display = 'none';
+    document.getElementById('harga_' + kode_barang).style.display = 'none';
+    document.getElementById('supplier_aktif_' + kode_barang).style.display = 'none';
+    
+    // Tampilkan form update
+    document.getElementById('update_form_' + kode_barang).style.display = 'block';
+  }
+
+  function hideUpdateForm(kode_barang) {
+    // Tampilkan data biasa
+    document.getElementById('nama_barang_' + kode_barang).style.display = 'table-cell';
+    document.getElementById('jumlah_' + kode_barang).style.display = 'table-cell';
+    document.getElementById('harga_' + kode_barang).style.display = 'table-cell';
+    document.getElementById('supplier_aktif_' + kode_barang).style.display = 'table-cell';
+    
+    // Sembunyikan form update
+    document.getElementById('update_form_' + kode_barang).style.display = 'none';
+  }
+</script>
+{% endblock %}
